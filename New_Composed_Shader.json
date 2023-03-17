@@ -1,0 +1,41 @@
+{
+  "id": 6559,
+  "name": "New Composed Shader",
+  "fragment": "#define PI 3.14159265359\n\nprecision highp float;\nprecision highp int;\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 viewMatrix;\nuniform mat3 normalMatrix;\nuniform vec3 cameraPosition;\nuniform float time;\nuniform float zoom;\nuniform float borderWidth;\nuniform float circleSize;\nuniform float number;\nvarying vec3 vPosition;\nvarying vec3 vNormal;\nvarying vec2 vUv;\nvarying vec2 vUv2;\nfloat easeFunc(float i) \n                {\n                    return i * pow(min(cos(PI * sin(time * 4.0) / 2.0), 1.0 - abs(sin(time * 4.0))), 1.5);\n                }\nvec4 pattern1678892774047_142_main() \n                {\n                    vec4 pattern1678892774047_142_gl_FragColor = vec4(0.0);\n                    vec3 finalCol = vec3(60., 63., 81.) / 255.;\n                    vec3 worldPosition = (modelMatrix * vec4(vPosition, 1.0)).xyz;\n                    vec3 worldNormal = normalize(vec3(modelMatrix * vec4(vNormal, 0.0)));\n                    vec2 bottomLeft = step(vUv, vec2(borderWidth));\n                    vec2 bottomRight = 1.0 - step(vUv, vec2(1.0 - borderWidth));\n                    float border = clamp(bottomLeft.x + bottomLeft.y + bottomRight.x + bottomRight.y, 0.0, 1.0);\n                    float center = clamp(step(distance(fract((vUv * 2. - 1.) * number), vec2(0.5)), easeFunc(circleSize)), 0.0, 1.);\n                    float squares = clamp((step(fract((vUv.y * 2. - 1.) * zoom), 0.5) * step(fract((vUv.x * 2. - 1.) * zoom), 0.5)), 0.0, 1.0);\n                    finalCol = (finalCol * (1. - squares)) + (squares * vec3(213., 66., 60.) / 255.);\n                    finalCol = (finalCol * (1. - center)) + (center * vec3(255., 238., 186.) / 255.);\n                    finalCol = (finalCol * (1. - border)) + (border * vec3(255., 180., 113.) / 255.);\n                    pattern1678892774047_142_gl_FragColor = vec4(vec3(finalCol), 1.0);\n                    return pattern1678892774047_142_gl_FragColor *= 1.0;\n                }\nvoid main() \n                {\n                    gl_FragColor = pattern1678892774047_142_main();                }\n",
+  "vertex": "precision highp float;\nprecision highp int;\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 viewMatrix;\nuniform mat3 normalMatrix;\nuniform vec3 cameraPosition;\nuniform float time;\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\nattribute vec2 uv2;\nvarying vec3 vPosition;\nvarying vec3 vNormal;\nvarying vec2 vUv;\nvarying vec2 vUv2;\nvec4 pattern1678892774047_142_main() \n                {\n                    vec4 pattern1678892774047_142_gl_Position = vec4(0.0);\n                    vNormal = normal;\n                    vUv = uv;\n                    vUv2 = uv2;\n                    vPosition = position;\n                    pattern1678892774047_142_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return pattern1678892774047_142_gl_Position *= 1.0;\n                }\nvoid main() \n                {\n                    gl_Position = pattern1678892774047_142_main();                }\n",
+  "uniforms": {
+    "cameraPosition": {
+      "type": "v3",
+      "glslType": "vec3"
+    },
+    "time": {
+      "type": "f",
+      "glslType": "float"
+    },
+    "zoom": {
+      "value": "7.7489025",
+      "type": "f",
+      "glslType": "float"
+    },
+    "borderWidth": {
+      "value": "0.01505338",
+      "type": "f",
+      "glslType": "float"
+    },
+    "circleSize": {
+      "value": "0.3066559",
+      "type": "f",
+      "glslType": "float"
+    },
+    "number": {
+      "value": "2.26402363",
+      "type": "f",
+      "glslType": "float"
+    }
+  },
+  "url": "http://shaderfrog.com/app/view/6559",
+  "user": {
+    "username": "dapao",
+    "url": "http://shaderfrog.com/app/profile/andrewray"
+  }
+}
