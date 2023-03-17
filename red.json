@@ -1,0 +1,35 @@
+{
+  "id": 6582,
+  "name": "red",
+  "fragment": "precision highp float;\nuniform vec3 color;\nuniform vec3 ambientColor;\nuniform float time;\nvarying vec3 vNormal;\nvarying vec3 vPosition;\nvarying vec2 vUv;\nvec4 Dynamic_Colors1679060991559_245_main() \n                {\n                    vec4 Dynamic_Colors1679060991559_245_gl_FragColor = vec4(0.0);\n                    Dynamic_Colors1679060991559_245_gl_FragColor = vec4((color + vec3(vUv.x, sin(vUv.y * 20.0 + time), 0.0)) + ambientColor, 1.0);\n                    return Dynamic_Colors1679060991559_245_gl_FragColor *= 1.0;\n                }\nvoid main() \n                {\n                    gl_FragColor = Dynamic_Colors1679060991559_245_main();                }\n",
+  "vertex": "precision highp float;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 modelMatrix;\nuniform float time;\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\nvarying vec3 vNormal;\nvarying vec3 vPosition;\nvarying vec2 vUv;\nvec4 Dynamic_Colors1679060991559_245_main() \n                {\n                    vec4 Dynamic_Colors1679060991559_245_gl_Position = vec4(0.0);\n                    vNormal = normalize(vec3(modelMatrix * vec4(normal, 0.0))).xyz;\n                    vUv = uv;\n                    vec3 vPosition = (modelMatrix * vec4(position, 1.0)).xyz;\n                    Dynamic_Colors1679060991559_245_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return Dynamic_Colors1679060991559_245_gl_Position *= 1.0;\n                }\nvoid main() \n                {\n                    gl_Position = Dynamic_Colors1679060991559_245_main();                }\n",
+  "uniforms": {
+    "color": {
+      "value": {
+        "r": 0.11764705882352941,
+        "g": 0.4196078431372549,
+        "b": 0.24313725490196078
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "ambientColor": {
+      "value": {
+        "r": 0.615686274509804,
+        "g": 0.10588235294117647,
+        "b": 0.10588235294117647
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "time": {
+      "type": "f",
+      "glslType": "float"
+    }
+  },
+  "url": "http://shaderfrog.com/app/view/6582",
+  "user": {
+    "username": "dapao",
+    "url": "http://shaderfrog.com/app/profile/andrewray"
+  }
+}
