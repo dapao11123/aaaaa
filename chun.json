@@ -1,0 +1,27 @@
+{
+  "id": 6576,
+  "name": "chun",
+  "fragment": "precision highp float;\nprecision highp int;\nuniform vec3 color;\nuniform float alpha;\nvarying vec2 vUv;\nvec4 Soild_Color1679059725547_78_main(void) \n                {\n                    vec4 Soild_Color1679059725547_78_gl_FragColor = vec4(0.0);\n                    Soild_Color1679059725547_78_gl_FragColor = vec4(color, alpha);\n                    return Soild_Color1679059725547_78_gl_FragColor *= 1.0;\n                }\nvoid main() \n                {\n                    gl_FragColor = Soild_Color1679059725547_78_main();                }\n",
+  "vertex": "precision highp float;\nprecision highp int;\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 viewMatrix;\nuniform mat3 normalMatrix;\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\nattribute vec2 uv2;\nvec4 Soild_Color1679059725547_78_main() \n                {\n                    vec4 Soild_Color1679059725547_78_gl_Position = vec4(0.0);\n                    Soild_Color1679059725547_78_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return Soild_Color1679059725547_78_gl_Position *= 1.0;\n                }\nvoid main() \n                {\n                    gl_Position = Soild_Color1679059725547_78_main();                }\n",
+  "uniforms": {
+    "color": {
+      "value": {
+        "r": 1,
+        "g": 1,
+        "b": 1
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "alpha": {
+      "value": "1",
+      "type": "f",
+      "glslType": "float"
+    }
+  },
+  "url": "http://shaderfrog.com/app/view/6576",
+  "user": {
+    "username": "dapao",
+    "url": "http://shaderfrog.com/app/profile/andrewray"
+  }
+}

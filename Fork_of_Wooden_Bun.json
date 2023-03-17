@@ -1,0 +1,152 @@
+{
+  "id": 6572,
+  "name": "Fork of Wooden Bun",
+  "fragment": "#extension GL_OES_standard_derivatives : enable\n\nprecision highp float;\nprecision highp int;\nuniform vec3 Procedural_Wood1678980790372_254508_color1;\nuniform vec3 Procedural_Wood1678980790372_254508_color2;\nuniform float frequency;\nuniform float noiseScale;\nuniform float ringScale;\nuniform float contrast;\nuniform float time;\nuniform vec3 color;\nuniform float start;\nuniform float end;\nuniform float alpha;\nuniform mat4 modelViewMatrix;\nuniform mat4 viewMatrix;\nuniform float shininess;\nuniform vec3 specular;\nuniform vec3 pointLightColor;\nuniform vec3 pointLightPosition;\nuniform float pointLightDistance;\nuniform float pointLightDecay;\nuniform vec3 wrapRGB;\nuniform float mirrorReflection;\nuniform samplerCube reflectionSampler;\nuniform vec3 cameraPosition;\nuniform sampler2D normalMap;\nuniform vec3 Vertical_2_Color_Graident1678980790756_254523_color1;\nuniform vec3 Vertical_2_Color_Graident1678980790756_254523_color2;\nvarying vec3 Procedural_Wood1678980790372_254508_vNormal;\nvarying vec2 Procedural_Wood1678980790372_254508_vUv;\nvarying vec3 Procedural_Wood1678980790372_254508_vPosition;\nvec3 mod289(vec3 x) \n                {\n                    return x - floor(x * (1.0 / 289.0)) * 289.0;\n                }\nvec4 mod289(vec4 x) \n                {\n                    return x - floor(x * (1.0 / 289.0)) * 289.0;\n                }\nvec4 permute(vec4 x) \n                {\n                    return mod289(((x * 34.0) + 1.0) * x);\n                }\nvec4 taylorInvSqrt(vec4 r) \n                {\n                    return 1.79284291400159 - 0.85373472095314 * r;\n                }\nfloat snoise(vec3 v) \n                {\n                    const vec2 C = vec2(1.0 / 6.0, 1.0 / 3.0);\n                    const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);\n                    vec3 i = floor(v + dot(v, C.yyy));\n                    vec3 x0 = v - i + dot(i, C.xxx);\n                    vec3 g = step(x0.yzx, x0.xyz);\n                    vec3 l = 1.0 - g;\n                    vec3 i1 = min(g.xyz, l.zxy);\n                    vec3 i2 = max(g.xyz, l.zxy);\n                    vec3 x1 = x0 - i1 + C.xxx;\n                    vec3 x2 = x0 - i2 + C.yyy;\n                    vec3 x3 = x0 - D.yyy;\n                    i = mod289(i);\n                    vec4 p = permute(permute(permute(i.z + vec4(0.0, i1.z, i2.z, 1.0)) + i.y + vec4(0.0, i1.y, i2.y, 1.0)) + i.x + vec4(0.0, i1.x, i2.x, 1.0));\n                    float n_ = 0.142857142857;\n                    vec3 ns = n_ * D.wyz - D.xzx;\n                    vec4 j = p - 49.0 * floor(p * ns.z * ns.z);\n                    vec4 x_ = floor(j * ns.z);\n                    vec4 y_ = floor(j - 7.0 * x_);\n                    vec4 x = x_ * ns.x + ns.yyyy;\n                    vec4 y = y_ * ns.x + ns.yyyy;\n                    vec4 h = 1.0 - abs(x) - abs(y);\n                    vec4 b0 = vec4(x.xy, y.xy);\n                    vec4 b1 = vec4(x.zw, y.zw);\n                    vec4 s0 = floor(b0) * 2.0 + 1.0;\n                    vec4 s1 = floor(b1) * 2.0 + 1.0;\n                    vec4 sh = -step(h, vec4(0.0));\n                    vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;\n                    vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;\n                    vec3 p0 = vec3(a0.xy, h.x);\n                    vec3 p1 = vec3(a0.zw, h.y);\n                    vec3 p2 = vec3(a1.xy, h.z);\n                    vec3 p3 = vec3(a1.zw, h.w);\n                    vec4 norm = taylorInvSqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));\n                    p0 *= norm.x;\n                    p1 *= norm.y;\n                    p2 *= norm.z;\n                    p3 *= norm.w;\n                    vec4 m = max(0.6 - vec4(dot(x0, x0), dot(x1, x1), dot(x2, x2), dot(x3, x3)), 0.0);\n                    m = m * m;\n                    return 42.0 * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));\n                }\nvarying vec3 fPosition;\nvarying vec3 fNormal;\nvarying vec3 Three_js_Point_Light1678980790589_254514_vNormal;\nvarying vec3 vViewPosition;\nfloat saturate(in float a) \n                {\n                    return clamp(a, 0.0, 1.0);\n                }\nfloat calcLightAttenuation(float lightDistance, float cutoffDistance, float decayExponent) \n                {\n                    if (decayExponent > 0.0) \n                    {\n                        return pow(saturate(1.0 - lightDistance / cutoffDistance), decayExponent);\n                    }\n                     return 1.0;\n                }\nfloat specularStrength = 1.0;\nvarying vec3 vReflect;\nvarying vec2 Normal_Map1678980790721_254520_vUv;\nvarying mat3 tbn;\nvarying vec3 vLightVector;\nvarying vec2 Vertical_2_Color_Graident1678980790756_254523_vUv;\nvec4 Procedural_Wood1678980790372_254508_main() \n                {\n                    vec4 Procedural_Wood1678980790372_254508_gl_FragColor = vec4(0.0);\n                    float n = snoise(Procedural_Wood1678980790372_254508_vPosition);\n                    float ring = fract(frequency * Procedural_Wood1678980790372_254508_vPosition.z + noiseScale * n);\n                    ring *= contrast * (1.0 - ring);\n                    float lerp = pow(ring, ringScale) + n;\n                    vec3 base = mix(Procedural_Wood1678980790372_254508_color1, Procedural_Wood1678980790372_254508_color2, lerp);\n                    Procedural_Wood1678980790372_254508_gl_FragColor = vec4(base, 1.0);\n                    return Procedural_Wood1678980790372_254508_gl_FragColor *= 1.5;\n                }\nvec4 Glow_Effect1678980790560_254511_main() \n                {\n                    vec4 Glow_Effect1678980790560_254511_gl_FragColor = vec4(0.0);\n                    vec3 normal = normalize(fNormal);\n                    vec3 eye = normalize(-fPosition.xyz);\n                    float rim = smoothstep(start, end, 1.0 - dot(normal, eye));\n                    Glow_Effect1678980790560_254511_gl_FragColor = vec4(clamp(rim, 0.0, 1.0) * alpha * color, 1.0);\n                    return Glow_Effect1678980790560_254511_gl_FragColor *= 0.3;\n                }\nvec4 Three_js_Point_Light1678980790589_254514_main() \n                {\n                    vec4 Three_js_Point_Light1678980790589_254514_gl_FragColor = vec4(0.0);\n                    vec3 totalDiffuseLight = vec3(0.0);\n                    vec3 totalSpecularLight = vec3(0.0);\n                    vec3 normal = normalize(vec3(modelViewMatrix * vec4(Three_js_Point_Light1678980790589_254514_vNormal, 0.0)));\n                    vec4 lPosition = viewMatrix * vec4(pointLightPosition, 1.0);\n                    vec3 lVector = lPosition.xyz + vViewPosition.xyz;\n                    float attenuation = calcLightAttenuation(length(lVector), pointLightDistance, pointLightDecay);\n                    lVector = normalize(lVector);\n                    float dotProduct = dot(normal, lVector);\n                    float dirDiffuseWeightFull = max(dotProduct, 0.0);\n                    float dirDiffuseWeightHalf = max(0.5 * dotProduct + 0.5, 0.0);\n                    vec3 dirDiffuseWeight = mix(vec3(dirDiffuseWeightFull), vec3(dirDiffuseWeightHalf), wrapRGB);\n                    float pointDiffuseWeightFull = max(dotProduct, 0.0);\n                    float pointDiffuseWeightHalf = max(0.5 * dotProduct + 0.5, 0.0);\n                    vec3 pointDiffuseWeight = mix(vec3(pointDiffuseWeightFull), vec3(pointDiffuseWeightHalf), wrapRGB);\n                    totalDiffuseLight += pointLightColor * pointDiffuseWeight * attenuation;\n                    vec3 pointHalfVector = normalize(lVector + vViewPosition);\n                    float pointDotNormalHalf = max(dot(normal, pointHalfVector), 0.0);\n                    float pointSpecularWeight = specularStrength * max(pow(pointDotNormalHalf, shininess), 0.0);\n                    float specularNormalization = (shininess + 2.0) / 8.0;\n                    vec3 schlick = specular + vec3(1.0 - specular) * pow(max(1.0 - dot(lVector, pointHalfVector), 0.0), 5.0);\n                    totalSpecularLight += schlick * pointLightColor * pointSpecularWeight * pointDiffuseWeight * attenuation * specularNormalization;\n                    Three_js_Point_Light1678980790589_254514_gl_FragColor = vec4(totalSpecularLight + totalDiffuseLight, 1.0);\n                    return Three_js_Point_Light1678980790589_254514_gl_FragColor *= 0.2;\n                }\nvec4 Reflection_Cube_Map1678980790695_254517_main() \n                {\n                    vec4 Reflection_Cube_Map1678980790695_254517_gl_FragColor = vec4(0.0);\n                    vec4 cubeColor = textureCube(reflectionSampler, vec3(mirrorReflection * vReflect.x, vReflect.yz));\n                    cubeColor.w = 1.0;\n                    Reflection_Cube_Map1678980790695_254517_gl_FragColor = cubeColor;\n                    return Reflection_Cube_Map1678980790695_254517_gl_FragColor *= 0.1;\n                }\nvec4 Normal_Map1678980790721_254520_main() \n                {\n                    vec4 Normal_Map1678980790721_254520_gl_FragColor = vec4(0.0);\n                    vec3 normalCoordinate = texture2D(normalMap, Normal_Map1678980790721_254520_vUv).xyz * 2.0 - 1.0;\n                    vec3 normal = normalize(tbn * normalCoordinate.rgb);\n                    float intensity = max(0.0, dot(normal, vLightVector));\n                    Normal_Map1678980790721_254520_gl_FragColor = vec4(vec3(intensity), 1.0);\n                    return Normal_Map1678980790721_254520_gl_FragColor *= 0.2;\n                }\nvec4 Vertical_2_Color_Graident1678980790756_254523_main(void) \n                {\n                    vec4 Vertical_2_Color_Graident1678980790756_254523_gl_FragColor = vec4(0.0);\n                    vec3 mixCol = mix(Vertical_2_Color_Graident1678980790756_254523_color2, Vertical_2_Color_Graident1678980790756_254523_color1, Vertical_2_Color_Graident1678980790756_254523_vUv.y);\n                    Vertical_2_Color_Graident1678980790756_254523_gl_FragColor = vec4(mixCol, 1.);\n                    return Vertical_2_Color_Graident1678980790756_254523_gl_FragColor *= 0.1;\n                }\nvoid main() \n                {\n                    gl_FragColor = (Procedural_Wood1678980790372_254508_main() + Glow_Effect1678980790560_254511_main() + Three_js_Point_Light1678980790589_254514_main() + Reflection_Cube_Map1678980790695_254517_main() + Normal_Map1678980790721_254520_main() + Vertical_2_Color_Graident1678980790756_254523_main());                }\n",
+  "vertex": "precision highp float;\nprecision highp int;\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 viewMatrix;\nuniform mat3 normalMatrix;\nuniform vec3 cameraPosition;\nuniform vec2 uvScale;\nuniform vec3 lightPosition;\nattribute vec3 position;\nattribute vec3 normal;\nattribute vec2 uv;\nattribute vec2 uv2;\nvarying vec3 Procedural_Wood1678980790372_254508_vPosition;\nvarying vec3 Procedural_Wood1678980790372_254508_vNormal;\nvarying vec2 Procedural_Wood1678980790372_254508_vUv;\nvarying vec3 fNormal;\nvarying vec3 fPosition;\nvarying vec3 Three_js_Point_Light1678980790589_254514_vPosition;\nvarying vec3 Three_js_Point_Light1678980790589_254514_vNormal;\nvarying vec3 vViewPosition;\nvarying vec3 vReflect;\nattribute vec4 tangent;\nvarying vec2 Normal_Map1678980790721_254520_vUv;\nvarying mat3 tbn;\nvarying vec3 vLightVector;\nvarying vec2 Vertical_2_Color_Graident1678980790756_254523_vUv;\nvec4 Procedural_Wood1678980790372_254508_main() \n                {\n                    vec4 Procedural_Wood1678980790372_254508_gl_Position = vec4(0.0);\n                    Procedural_Wood1678980790372_254508_vNormal = normal;\n                    Procedural_Wood1678980790372_254508_vUv = uv;\n                    Procedural_Wood1678980790372_254508_vPosition = position;\n                    Procedural_Wood1678980790372_254508_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return Procedural_Wood1678980790372_254508_gl_Position *= 1.5;\n                }\nvec4 Glow_Effect1678980790560_254511_main() \n                {\n                    vec4 Glow_Effect1678980790560_254511_gl_Position = vec4(0.0);\n                    fNormal = normalize(normalMatrix * normal);\n                    vec4 pos = modelViewMatrix * vec4(position, 1.0);\n                    fPosition = pos.xyz;\n                    Glow_Effect1678980790560_254511_gl_Position = projectionMatrix * pos;\n                    return Glow_Effect1678980790560_254511_gl_Position *= 0.3;\n                }\nvec4 Three_js_Point_Light1678980790589_254514_main() \n                {\n                    vec4 Three_js_Point_Light1678980790589_254514_gl_Position = vec4(0.0);\n                    Three_js_Point_Light1678980790589_254514_vNormal = normal;\n                    Three_js_Point_Light1678980790589_254514_vPosition = position;\n                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);\n                    vViewPosition = -mvPosition.xyz;\n                    Three_js_Point_Light1678980790589_254514_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return Three_js_Point_Light1678980790589_254514_gl_Position *= 0.2;\n                }\nvec4 Reflection_Cube_Map1678980790695_254517_main() \n                {\n                    vec4 Reflection_Cube_Map1678980790695_254517_gl_Position = vec4(0.0);\n                    vec3 worldPosition = (modelMatrix * vec4(position, 1.0)).xyz;\n                    vec3 cameraToVertex = normalize(worldPosition - cameraPosition);\n                    vec3 worldNormal = normalize(mat3(modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz) * normal);\n                    vReflect = reflect(cameraToVertex, worldNormal);\n                    Reflection_Cube_Map1678980790695_254517_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return Reflection_Cube_Map1678980790695_254517_gl_Position *= 0.1;\n                }\nvec4 Normal_Map1678980790721_254520_main() \n                {\n                    vec4 Normal_Map1678980790721_254520_gl_Position = vec4(0.0);\n                    Normal_Map1678980790721_254520_vUv = uvScale * uv;\n                    vec3 vNormal = normalize(normalMatrix * normal);\n                    vec3 vTangent = normalize(normalMatrix * tangent.xyz);\n                    vec3 vBinormal = normalize(cross(vNormal, vTangent) * tangent.w);\n                    tbn = mat3(vTangent, vBinormal, vNormal);\n                    vec4 lightVector = viewMatrix * vec4(lightPosition, 1.0);\n                    vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);\n                    vLightVector = normalize(lightVector.xyz - modelViewPosition.xyz);\n                    Normal_Map1678980790721_254520_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return Normal_Map1678980790721_254520_gl_Position *= 0.2;\n                }\nvec4 Vertical_2_Color_Graident1678980790756_254523_main() \n                {\n                    vec4 Vertical_2_Color_Graident1678980790756_254523_gl_Position = vec4(0.0);\n                    Vertical_2_Color_Graident1678980790756_254523_vUv = uv;\n                    Vertical_2_Color_Graident1678980790756_254523_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return Vertical_2_Color_Graident1678980790756_254523_gl_Position *= 0.1;\n                }\nvoid main() \n                {\n                    gl_Position = Procedural_Wood1678980790372_254508_main() + Glow_Effect1678980790560_254511_main() + Three_js_Point_Light1678980790589_254514_main() + Reflection_Cube_Map1678980790695_254517_main() + Normal_Map1678980790721_254520_main() + Vertical_2_Color_Graident1678980790756_254523_main();                }\n",
+  "uniforms": {
+    "frequency": {
+      "value": "10",
+      "type": "f",
+      "glslType": "float"
+    },
+    "noiseScale": {
+      "value": "12",
+      "type": "f",
+      "glslType": "float"
+    },
+    "ringScale": {
+      "value": "0.4",
+      "type": "f",
+      "glslType": "float"
+    },
+    "contrast": {
+      "value": "1.5",
+      "type": "f",
+      "glslType": "float"
+    },
+    "time": {
+      "type": "f",
+      "glslType": "float"
+    },
+    "Procedural_Wood1678980790372_254508_color1": {
+      "value": {
+        "r": 0.5411764705882353,
+        "g": 0.22745098039215686,
+        "b": 0.058823529411764705
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "Procedural_Wood1678980790372_254508_color2": {
+      "value": {
+        "r": 0.7843137254901961,
+        "g": 0.5411764705882353,
+        "b": 0.4196078431372549
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "color": {
+      "value": {
+        "r": 0.996078431372549,
+        "g": 0.7137254901960784,
+        "b": 0.5137254901960784
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "start": {
+      "value": "0",
+      "type": "f",
+      "glslType": "float"
+    },
+    "end": {
+      "value": "0.9",
+      "type": "f",
+      "glslType": "float"
+    },
+    "alpha": {
+      "value": "1",
+      "type": "f",
+      "glslType": "float"
+    },
+    "shininess": {
+      "value": "10",
+      "type": "f",
+      "glslType": "float"
+    },
+    "specular": {
+      "value": {
+        "r": 1,
+        "g": 0.8117647058823529,
+        "b": 0.6588235294117647
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "wrapRGB": {
+      "value": {
+        "r": 0,
+        "g": 0,
+        "b": 0
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "mirrorReflection": {
+      "value": "1",
+      "type": "f",
+      "glslType": "float"
+    },
+    "reflectionSampler": {
+      "value": null,
+      "type": "t",
+      "glslType": "samplerCube"
+    },
+    "normalMap": {
+      "value": null,
+      "type": "t",
+      "glslType": "sampler2D"
+    },
+    "uvScale": {
+      "value": {
+        "x": "3",
+        "y": "3"
+      },
+      "type": "v2",
+      "glslType": "vec2"
+    },
+    "lightPosition": {
+      "value": {
+        "x": -0.832807533725776,
+        "y": -0.15164710395665087,
+        "z": 1.812025046082739
+      },
+      "type": "v3",
+      "glslType": "vec3"
+    },
+    "Vertical_2_Color_Graident1678980790756_254523_color1": {
+      "value": {
+        "r": "1",
+        "g": "1",
+        "b": "1"
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "Vertical_2_Color_Graident1678980790756_254523_color2": {
+      "value": {
+        "r": "0",
+        "g": "0",
+        "b": "0"
+      },
+      "type": "c",
+      "glslType": "vec3"
+    }
+  },
+  "url": "http://shaderfrog.com/app/view/6572",
+  "user": {
+    "username": "dapao",
+    "url": "http://shaderfrog.com/app/profile/andrewray"
+  }
+}
