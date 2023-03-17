@@ -1,0 +1,58 @@
+{
+  "id": 6574,
+  "name": "white",
+  "fragment": "precision highp float;\nuniform vec3 model_color;\nuniform vec3 plane_color;\nuniform vec3 ambient_color;\nuniform vec3 light_color;\nuniform vec3 light_position;\nvarying vec3 vPosition;\nvarying vec3 vNormal;\nvec4 direct_ambient_single_bounce_from_infinite_plane1679039594778_296_main() \n                {\n                    vec4 direct_ambient_single_bounce_from_infinite_plane1679039594778_296_gl_FragColor = vec4(0.0);\n                    vec3 pos = vPosition;\n                    vec3 N = normalize(vNormal);\n                    vec3 L = normalize(light_position);\n                    vec3 up_color = ambient_color * ambient_color;\n                    vec3 down_color = (up_color + light_color * light_color * max(0.0, L.y)) * plane_color * plane_color;\n                    float occlusion = dot(N, normalize(pos)) * 0.5 + 0.5;\n                    vec3 direct = max(0.0, dot(N, L)) * light_color * light_color;\n                    vec3 ambient = mix(down_color, up_color, N.y * 0.5 + 0.5) * occlusion * occlusion;\n                    vec3 color = (direct + ambient) * model_color * model_color;\n                    if (pos.y < -0.6) \n                    {\n                        color = down_color;\n                    }\n                     direct_ambient_single_bounce_from_infinite_plane1679039594778_296_gl_FragColor = vec4(sqrt(color), 1.0);\n                    return direct_ambient_single_bounce_from_infinite_plane1679039594778_296_gl_FragColor *= 1.0;\n                }\nvoid main() \n                {\n                    gl_FragColor = direct_ambient_single_bounce_from_infinite_plane1679039594778_296_main();                }\n",
+  "vertex": "precision highp float;\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nattribute vec3 position;\nattribute vec3 normal;\nvarying vec3 vPosition;\nvarying vec3 vNormal;\nvec4 direct_ambient_single_bounce_from_infinite_plane1679039594778_296_main() \n                {\n                    vec4 direct_ambient_single_bounce_from_infinite_plane1679039594778_296_gl_Position = vec4(0.0);\n                    vNormal = (modelMatrix * vec4(normal, 0.0)).xyz;\n                    vPosition = (modelMatrix * vec4(position, 1.0)).xyz;\n                    direct_ambient_single_bounce_from_infinite_plane1679039594778_296_gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n                    return direct_ambient_single_bounce_from_infinite_plane1679039594778_296_gl_Position *= 1.0;\n                }\nvoid main() \n                {\n                    gl_Position = direct_ambient_single_bounce_from_infinite_plane1679039594778_296_main();                }\n",
+  "uniforms": {
+    "model_color": {
+      "value": {
+        "r": "1",
+        "g": "1",
+        "b": "1"
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "plane_color": {
+      "value": {
+        "r": 0.8745098039215686,
+        "g": 0.5882352941176471,
+        "b": 0.7411764705882353
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "ambient_color": {
+      "value": {
+        "r": "0.25",
+        "g": "0.25",
+        "b": "0.25"
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "light_color": {
+      "value": {
+        "r": "1",
+        "g": "1",
+        "b": "1"
+      },
+      "type": "c",
+      "glslType": "vec3"
+    },
+    "light_position": {
+      "value": {
+        "x": 0.7830066023686141,
+        "y": -0.22215906459991036,
+        "z": -0.5809871002554636
+      },
+      "type": "v3",
+      "glslType": "vec3"
+    }
+  },
+  "url": "http://shaderfrog.com/app/view/6574",
+  "user": {
+    "username": "dapao",
+    "url": "http://shaderfrog.com/app/profile/andrewray"
+  }
+}

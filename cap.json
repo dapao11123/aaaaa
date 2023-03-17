@@ -1,0 +1,36 @@
+{
+  "id": 6580,
+  "name": "cap",
+  "fragment": "#extension GL_OES_standard_derivatives : enable\n\nprecision highp float;\nuniform float time;\nuniform float frequency;\nuniform float amplitude;\nuniform vec3 color;\nvarying vec3 fPosition;\nvarying vec3 fNormal;\nvarying vec3 oPosition;\nmat3 cotangent_frame(vec3 N, vec3 p, vec2 uv) \n                {\n                    vec3 dp1 = dFdx(p);\n                    vec3 dp2 = dFdy(p);\n                    vec2 duv1 = dFdx(uv);\n                    vec2 duv2 = dFdy(uv);\n                    vec3 dp2perp = cross(dp2, N);\n                    vec3 dp1perp = cross(N, dp1);\n                    vec3 T = dp2perp * duv1.x + dp1perp * duv2.x;\n                    vec3 B = dp2perp * duv1.y + dp1perp * duv2.y;\n                    float invmax = inversesqrt(max(dot(T, T), dot(B, B)));\n                    return mat3(T * invmax, B * invmax, N);\n                }\nvec3 perturb_normal(vec3 N, vec3 V, vec2 texcoord, vec3 P) \n                {\n                    vec3 map = vec3(amplitude * cos(-P.x * frequency + time * 4.), 1.0, 1.0);\n                    mat3 TBN = cotangent_frame(N, -V, texcoord);\n                    return normalize(TBN * map);\n                }\nvec3 rim(vec3 color, float start, float end, float coef) \n                {\n                    vec3 normal = normalize(fNormal);\n                    vec3 eye = normalize(-fPosition.xyz);\n                    float rim = smoothstep(start, end, 1.0 - dot(normal, eye));\n                    return clamp(rim, 0.0, 1.0) * coef * color;\n                }\nvec2 blinnPhongDir(vec3 N, vec3 lightDir, float lightInt, float Ka, float Kd, float Ks, float shininess) \n                {\n                    vec3 s = normalize(lightDir);\n                    vec3 v = normalize(-fPosition);\n                    vec3 n = normalize(N);\n                    vec3 h = normalize(v + s);\n                    float diffuse = Ka + Kd * lightInt * max(0.0, dot(n, s));\n                    float spec = Ks * pow(max(0.0, dot(n, h)), shininess);\n                    return vec2(diffuse, spec);\n                }\nvec4 Wavy_Plastic1679060269610_843_main() \n                {\n                    vec4 Wavy_Plastic1679060269610_843_gl_FragColor = vec4(0.0);\n                    vec3 N = normalize(fNormal);\n                    vec3 V = normalize(-fPosition);\n                    N = perturb_normal(N, V, gl_FragCoord.xy, oPosition);\n                    vec3 rimi = rim(vec3(1.0, 0.5, 0.0), 0.2, 0.9, 1.0);\n                    vec2 blin = blinnPhongDir(N, vec3(1.0, 1.0, 1.0), 1.0, 0.3, 0.6, 0.6, 42.0);\n                    vec3 c = color * blin.x + blin.y;\n                    Wavy_Plastic1679060269610_843_gl_FragColor = vec4(c, 1.0);\n                    return Wavy_Plastic1679060269610_843_gl_FragColor *= 1.0;\n                }\nvoid main() \n                {\n                    gl_FragColor = Wavy_Plastic1679060269610_843_main();                }\n",
+  "vertex": "precision highp float;\nuniform mat3 normalMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nattribute vec3 position;\nattribute vec3 normal;\nvarying vec3 fNormal;\nvarying vec3 fPosition;\nvarying vec3 oPosition;\nvec4 Wavy_Plastic1679060269610_843_main() \n                {\n                    vec4 Wavy_Plastic1679060269610_843_gl_Position = vec4(0.0);\n                    fNormal = normalize(normalMatrix * normal);\n                    oPosition = position;\n                    vec4 pos = modelViewMatrix * vec4(position, 1.0);\n                    fPosition = pos.xyz;\n                    Wavy_Plastic1679060269610_843_gl_Position = projectionMatrix * pos;\n                    return Wavy_Plastic1679060269610_843_gl_Position *= 1.0;\n                }\nvoid main() \n                {\n                    gl_Position = Wavy_Plastic1679060269610_843_main();                }\n",
+  "uniforms": {
+    "time": {
+      "type": "f",
+      "glslType": "float"
+    },
+    "frequency": {
+      "value": "10",
+      "type": "f",
+      "glslType": "float"
+    },
+    "amplitude": {
+      "value": "2",
+      "type": "f",
+      "glslType": "float"
+    },
+    "color": {
+      "value": {
+        "r": 1,
+        "g": 0.9725490196078431,
+        "b": 0.9764705882352941
+      },
+      "type": "c",
+      "glslType": "vec3"
+    }
+  },
+  "url": "http://shaderfrog.com/app/view/6580",
+  "user": {
+    "username": "dapao",
+    "url": "http://shaderfrog.com/app/profile/andrewray"
+  }
+}
